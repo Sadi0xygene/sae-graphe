@@ -27,12 +27,47 @@ public class GrapheHHAdj implements VarGraph {
 		// Vérifier si l'arc existe déjà
 		List<Arc<String>> arcs = adjacencyList.get(source);
 		for (Arc<String> arc : arcs) {
-			if (arc.dst().equals(destination)) {  // Correction : utilisation de dst() au lieu d'accès direct
+			if (arc.dst().equals(destination)) {
 				throw new IllegalArgumentException("Arc déjà existant");
 			}
 		}
 
 		// Ajouter le nouvel arc
 		arcs.add(new Arc<>(valeur, destination));
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		boolean firstEntry = true;
+
+		for (Map.Entry<String, List<Arc<String>>> entry : adjacencyList.entrySet()) {
+			String source = entry.getKey();
+			List<Arc<String>> arcs = entry.getValue();
+
+			if (arcs.isEmpty()) {
+				if (!firstEntry) {
+					sb.append(", ");
+				}
+				sb.append(source).append(":");
+				firstEntry = false;
+				continue;
+			}
+
+			for (Arc<String> arc : arcs) {
+				if (!firstEntry) {
+					sb.append(", ");
+				}
+				sb.append(source)
+						.append("-")
+						.append(arc.dst())
+						.append("(")
+						.append(arc.val())
+						.append(")");
+				firstEntry = false;
+			}
+		}
+
+		return sb.toString();
 	}
 }
